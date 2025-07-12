@@ -99,10 +99,16 @@ header p {
 }
 
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  display: flex;
+  /* grid-template-columns: 1fr 1fr auto; */
   gap: 1rem;
   align-items: end;
+  width: 100%;
+}
+
+.form-row .form-group {
+  flex-grow: 1;
+  margin-bottom: 0;
 }
 
 .form-group label {
@@ -288,7 +294,7 @@ header p {
 .table-controls {
   display: flex;
   gap: 1rem;
-  align-items: center;
+  align-items: stretch;
 }
 
 .table-controls input {
