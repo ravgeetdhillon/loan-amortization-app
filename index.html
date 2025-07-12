@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Car Loan Amortization Calculator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Car Loan Amortization Calculator</h1>
+        <p>Calculate your loan schedule with floating interest rates</p>
+      </header>
+
+      <div class="main-content">
+        <!-- Loan Input Section -->
+        <div class="card">
+          <h2>Loan Details</h2>
+          <form id="loanForm">
+            <div class="form-group">
+              <label for="principal">Principal Amount (₹)</label>
+              <input
+                type="number"
+                id="principal"
+                step="0.01"
+                required
+                value="1200000"
+                placeholder="e.g., 1200000"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="tenure">Tenure (Months)</label>
+              <input
+                type="number"
+                id="tenure"
+                min="1"
+                max="600"
+                required
+                value="84"
+                placeholder="e.g., 84"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="initialRate"
+                >Initial Interest Rate (% per annum)</label
+              >
+              <input
+                type="number"
+                id="initialRate"
+                step="0.01"
+                required
+                value="8.8"
+                placeholder="e.g., 8.8"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="startDate">Loan Start Date</label>
+              <input type="date" id="startDate" required value="2024-08-22" />
+            </div>
+
+            <div class="form-group">
+              <label for="paidTillDate">Paid Till Date (Optional)</label>
+              <input type="date" id="paidTillDate" />
+              <small class="form-help"
+                >Select the date till which you have paid EMIs to see progress
+                stats</small
+              >
+            </div>
+
+            <div class="form-group" id="emiDisplay" style="display: none">
+              <label>Calculated EMI:</label>
+              <div class="emi-amount" id="calculatedEMI">₹0</div>
+            </div>
+
+            <button type="submit" class="btn-primary">
+              Calculate EMI & Amortization
+            </button>
+          </form>
+        </div>
+
+        <!-- Interest Rate Update Section -->
+        <div class="card" id="updateRateSection" style="display: none">
+          <h2>Update Interest Rate</h2>
+          <form id="updateRateForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="paymentNumber">From Payment #</label>
+                <input type="number" id="paymentNumber" min="1" required />
+              </div>
+
+              <div class="form-group">
+                <label for="newRate">New Interest Rate (% per annum)</label>
+                <input type="number" id="newRate" step="0.01" required />
+              </div>
+
+              <button type="submit" class="btn-secondary">Update Rate</button>
+            </div>
+          </form>
+
+          <div id="rateChanges">
+            <h3>Rate Changes Applied:</h3>
+            <div id="rateChangesList"></div>
+          </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="card" id="summarySection" style="display: none">
+          <h2>Loan Summary</h2>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <label>Total Loan Interest:</label>
+              <span id="totalInterest">₹0.00</span>
+            </div>
+            <div class="summary-item">
+              <label>Total Loan Amount:</label>
+              <span id="totalAmount">₹0.00</span>
+            </div>
+            <div class="summary-item">
+              <label>Number of Payments:</label>
+              <span id="totalPayments">0</span>
+            </div>
+            <div class="summary-item">
+              <label>Loan Duration:</label>
+              <span id="loanDuration">0 years 0 months</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Progress Section -->
+        <div class="card" id="progressSection" style="display: none">
+          <h2>Payment Progress</h2>
+          <div class="progress-info" id="progressInfo" style="display: none">
+            <p>
+              <strong>Progress as of:</strong> <span id="progressDate"></span>
+            </p>
+          </div>
+          <div class="progress-grid">
+            <div class="progress-item paid">
+              <label>Interest Paid:</label>
+              <span id="interestPaid">₹0.00</span>
+            </div>
+            <div class="progress-item remaining">
+              <label>Interest Remaining:</label>
+              <span id="interestLeft">₹0.00</span>
+            </div>
+            <div class="progress-item paid">
+              <label>Principal Paid:</label>
+              <span id="principalPaid">₹0.00</span>
+            </div>
+            <div class="progress-item remaining">
+              <label>Principal Remaining:</label>
+              <span id="principalLeft">₹0.00</span>
+            </div>
+            <div class="progress-item paid">
+              <label>EMIs Paid:</label>
+              <span id="emisPaid">0</span>
+            </div>
+            <div class="progress-item remaining">
+              <label>EMIs Remaining:</label>
+              <span id="emisLeft">0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Amortization Table -->
+        <div class="card" id="tableSection" style="display: none">
+          <div class="table-header">
+            <h2>Amortization Schedule</h2>
+            <div class="table-controls">
+              <button id="exportBtn" class="btn-secondary">
+                Export to CSV
+              </button>
+              <input
+                type="text"
+                id="searchPayment"
+                placeholder="Search payment #..."
+              />
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table id="amortizationTable">
+              <thead>
+                <tr>
+                  <th>Payment #</th>
+                  <th>Date</th>
+                  <th>Interest Rate</th>
+                  <th>EMI</th>
+                  <th>Interest</th>
+                  <th>Principal</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-pagination">
+            <button id="prevPage" class="btn-secondary">Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="nextPage" class="btn-secondary">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

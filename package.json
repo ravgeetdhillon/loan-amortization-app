@@ -1,0 +1,25 @@
+{
+  "name": "car-loan-amortization-calculator",
+  "version": "1.0.0",
+  "description": "A web-based car loan amortization calculator with floating interest rates",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server --port=3000 --open=/index.html",
+    "dev": "live-server --port=3000 --open=/index.html --watch=.",
+    "install-dev": "npm install -g live-server"
+  },
+  "keywords": [
+    "loan",
+    "amortization",
+    "calculator",
+    "finance",
+    "emi",
+    "interest",
+    "floating-rate"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
